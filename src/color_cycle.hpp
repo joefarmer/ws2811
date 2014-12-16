@@ -51,7 +51,7 @@ void example_color_cycle( uint8_t channel)
 {
 	using ws2811::rgb;
 	rgb leds[2];
-	rgb sequence[] = {
+/*	rgb sequence[] = {
 			rgb( 0, 0, 30),
 			rgb( 0, 0, 0),
 			rgb( 0, 30, 30),
@@ -63,6 +63,27 @@ void example_color_cycle( uint8_t channel)
 			rgb( 30, 0, 0),
 			rgb( 0, 0, 0)			
 	};
+*/	
+	rgb sequence[] = {
+		rgb( 30, 30, 30),
+		rgb( 0, 0, 0),
+		rgb( 30, 30, 30),
+		rgb( 0, 0, 0),
+		rgb( 30, 30, 30),
+		rgb( 0, 0, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 30, 0),
+		rgb( 0, 0, 0),
+		rgb( 0, 30, 0),
+		rgb( 0, 0, 0),			
+		rgb( 0, 30, 0),
+		rgb( 0, 0, 0)			
+	};
+
 
 	color_cycle( sequence, leds, channel);
 
