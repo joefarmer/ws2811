@@ -65,11 +65,11 @@ void example_color_cycle( uint8_t channel)
 	};
 */	
 	rgb sequence[] = {
-		rgb( 30, 30, 30),
+		rgb( 30, 30, 24),
 		rgb( 0, 0, 0),
-		rgb( 30, 30, 30),
+		rgb( 30, 30, 24),
 		rgb( 0, 0, 0),
-		rgb( 30, 30, 30),
+		rgb( 30, 30, 24),
 		rgb( 0, 0, 0),
 		rgb( 0, 0, 0),
 		rgb( 0, 0, 0),
