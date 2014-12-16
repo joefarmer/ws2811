@@ -27,7 +27,7 @@ void animate( const ws2811::rgb &new_value, ws2811::rgb (&leds)[led_count], uint
 {
     scroll( new_value, leds);
     send( leds, channel);
-    _delay_ms( 40);
+    _delay_ms(33);
 }
 
 template<uint8_t count, uint8_t led_count>
@@ -63,25 +63,68 @@ void example_color_cycle( uint8_t channel)
 			rgb( 30, 0, 0),
 			rgb( 0, 0, 0)			
 	};
+	
+	const int step = 8; // Select this to be a power of two if you want the maximum brightness to be reachable
+for( int red = 0x00; red <= 0xFF; red += step ) {
+    for( int green = 0x00; green <= 0xFF; green += step ) {
+        for( int blue = 0x00; blue <= 0xFF; blue += step ) {
+            const int color = blue << 16 + green << 8 + red;
+            // Change the led settings here.
+        }
+    }
+} 
+
+Red = 0xFF0000
+		rgb( 127, 0, 0),
+Orange = 0xFFA500
+		rgb( 127, 64, 0),
+Yellow = 0xFFFF00
+		rgb( 127, 100, 0),
+Green = 0x008000
+		rgb( 0, 64, 0),
+Blue = 0x0000FF
+		rgb( 0, 0, 127),
+Purple = 0x800080
+		rgb( 64, 0, 64),
+
 */	
 	rgb sequence[] = {
-		rgb( 30, 30, 24),
-		rgb( 0, 0, 0),
-		rgb( 30, 30, 24),
-		rgb( 0, 0, 0),
-		rgb( 30, 30, 24),
-		rgb( 0, 0, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 30, 0),
-		rgb( 0, 0, 0),
-		rgb( 0, 30, 0),
+		rgb( 127, 0, 0),
 		rgb( 0, 0, 0),			
-		rgb( 0, 30, 0),
-		rgb( 0, 0, 0)			
+		rgb( 127, 0, 0),
+		rgb( 0, 0, 0),			
+		rgb( 127, 0, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 100, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 100, 0),
+		rgb( 0, 0, 0),	
+		rgb( 127, 100, 0),
+		rgb( 0, 0, 0),	
+		rgb( 0, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 0, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 0, 64, 0),
+		rgb( 0, 0, 0),	
+		rgb( 0, 0, 127),
+		rgb( 0, 0, 0),	
+		rgb( 0, 0, 127),
+		rgb( 0, 0, 0),	
+		rgb( 0, 0, 127),
+		rgb( 0, 0, 0),	
+		rgb( 64, 0, 64),
+		rgb( 0, 0, 0),	
+		rgb( 64, 0, 64),
+		rgb( 0, 0, 0),	
+		rgb( 64, 0, 64),
+		rgb( 0, 0, 0)		
 	};
 
 
