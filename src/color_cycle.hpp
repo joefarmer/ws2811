@@ -27,7 +27,7 @@ void animate( const ws2811::rgb &new_value, ws2811::rgb (&leds)[led_count], uint
 {
     scroll( new_value, leds);
     send( leds, channel);
-    _delay_ms(33);
+    _delay_ms(55);
 }
 
 template<uint8_t count, uint8_t led_count>
@@ -50,30 +50,42 @@ void color_cycle( ws2811::rgb (&sequence)[count], ws2811::rgb (&leds)[led_count]
 void example_color_cycle( uint8_t channel)
 {
 	using ws2811::rgb;
-	rgb leds[2];
-/*	rgb sequence[] = {
-			rgb( 0, 0, 30),
+	rgb leds[6];
+	
+	rgb sequence[] = {
+			rgb( 0, 255, 0),
 			rgb( 0, 0, 0),
-			rgb( 0, 30, 30),
-			rgb( 0, 0, 0),
-			rgb( 0, 30, 0),
-			rgb( 0, 0, 0),
-			rgb( 0, 30, 0),
-			rgb( 30, 0, 0),
-			rgb( 30, 0, 0),
+			rgb( 0, 255, 0),
+			rgb( 0, 0, 0),			
+			rgb( 0, 255, 0),
+			rgb( 0, 0, 0),			
+			rgb( 0, 0, 0),			
+			rgb( 0, 0, 0),			
+			rgb( 0, 0, 0),			
+			rgb( 255, 0, 0),
+			rgb( 0, 0, 0),			
+			rgb( 255, 0, 0),
+			rgb( 0, 0, 0),			
+			rgb( 255, 0, 0),
 			rgb( 0, 0, 0)			
 	};
-	
-	const int step = 8; // Select this to be a power of two if you want the maximum brightness to be reachable
-for( int red = 0x00; red <= 0xFF; red += step ) {
-    for( int green = 0x00; green <= 0xFF; green += step ) {
-        for( int blue = 0x00; blue <= 0xFF; blue += step ) {
-            const int color = blue << 16 + green << 8 + red;
-            // Change the led settings here.
-        }
-    }
-} 
+/*
+	rgb sequence[] = { rgb( 0, 0, 0) };
+	const int step = 16; // Select this to be a power of two if you want the maximum brightness to be reachable
 
+	for(;;){
+		for( int red = 0x00; red <= 0xFF; red += step ) {
+			for( int green = 0x00; green <= 0xFF; green += step ) {
+				for( int blue = 0x00; blue <= 0xFF; blue += step ) {
+					sequence = { rgb(red, green, blue) };
+					send(sequence, channel);
+					_delay_ms(33);
+				}
+			}
+		}
+	}	
+	
+	
 Red = 0xFF0000
 		rgb( 127, 0, 0),
 Orange = 0xFFA500
@@ -87,45 +99,46 @@ Blue = 0x0000FF
 Purple = 0x800080
 		rgb( 64, 0, 64),
 
-*/	
 	rgb sequence[] = {
-		rgb( 127, 0, 0),
+		rgb( 255, 0, 0),
 		rgb( 0, 0, 0),			
-		rgb( 127, 0, 0),
+		rgb( 255, 0, 0),
 		rgb( 0, 0, 0),			
-		rgb( 127, 0, 0),
+		rgb( 255, 0, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 64, 0),
+		rgb( 255, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 64, 0),
+		rgb( 255, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 64, 0),
+		rgb( 255, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 100, 0),
+		rgb( 255, 192, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 100, 0),
+		rgb( 255, 192, 0),
 		rgb( 0, 0, 0),	
-		rgb( 127, 100, 0),
+		rgb( 255, 192, 0),
 		rgb( 0, 0, 0),	
-		rgb( 0, 64, 0),
+		rgb( 0, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 0, 64, 0),
+		rgb( 0, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 0, 64, 0),
+		rgb( 0, 127, 0),
 		rgb( 0, 0, 0),	
-		rgb( 0, 0, 127),
+		rgb( 0, 0, 255),
 		rgb( 0, 0, 0),	
-		rgb( 0, 0, 127),
+		rgb( 0, 0, 255),
 		rgb( 0, 0, 0),	
-		rgb( 0, 0, 127),
+		rgb( 0, 0, 255),
 		rgb( 0, 0, 0),	
-		rgb( 64, 0, 64),
+		rgb( 127, 0, 127),
 		rgb( 0, 0, 0),	
-		rgb( 64, 0, 64),
+		rgb( 127, 0, 127),
 		rgb( 0, 0, 0),	
-		rgb( 64, 0, 64),
+		rgb( 127, 0, 127),
 		rgb( 0, 0, 0)		
 	};
+
+	*/
 
 
 	color_cycle( sequence, leds, channel);
