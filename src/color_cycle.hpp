@@ -29,21 +29,6 @@ namespace color_cycle
 		send( leds, channel);
 		_delay_ms(33);
 	}
-
-	template<uint8_t count, uint8_t led_count>
-	void color_cycle( ws2811::rgb (&sequence)[count], ws2811::rgb (&leds)[led_count], uint8_t channel)
-	{
-		for (uint8_t idx = 0; idx != count; ++idx)
-		{
-			animate( sequence[idx], leds, channel);
-		}
-		animate(ws2811::rgb(0,0,25), leds, channel);		
-		for (uint8_t idx = count; idx != 0; --idx)
-		{
-			animate( sequence[idx-1], leds, channel);
-		}
-		animate(ws2811::rgb(0,0,25), leds, channel);		
-	}
 	
 	template<uint8_t led_count>
 	void flash(bool alarm, ws2811::rgb color, ws2811::rgb (&leds)[led_count], uint8_t channel)

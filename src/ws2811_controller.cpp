@@ -4,9 +4,9 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
-#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
-#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
+//#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
+//#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
+//#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
 
 
 #include <avr/io.h>
@@ -14,19 +14,17 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <avr/interrupt.h> 
-//#include "chasers.hpp"
-//#include "flares.hpp"
 #include "color_cycle.hpp"
 
 
-	void example_color_cycle( uint8_t channel);
-	volatile static uint16_t in_start = 0;
-	volatile static uint8_t in_time  = 0;
-	volatile uint16_t timer0_overflow_count = 0;
+void example_color_cycle( uint8_t channel);
+volatile static uint16_t in_start = 0;
+volatile static uint16_t in_time  = 0;
+volatile uint16_t timer0_overflow_count = 0;
 
 SIGNAL(TIMER0_OVF_vect)
 {
-	timer0_overflow_count++;
+	timer0_overflow_count++;	
 }
 
 uint16_t micros() {
@@ -37,13 +35,12 @@ uint16_t micros() {
 	m = timer0_overflow_count;
 	t = TCNT0;
 
-  
 	if ((TIFR0 & _BV(TOV0)) && (t < 255))
 		m++;
 
 	SREG = oldSREG;
 	
-	return ((m << 8) + t) * (64 / clockCyclesPerMicrosecond());
+	return ((m << 8) + t) * 8;
 }
 
 
@@ -52,14 +49,13 @@ int main()
 	static const uint8_t channel = 5;
     DDRB = 0xFF;
 	DDRA &= ~(1<<PINA7);
-    //flares::flares( channel);
-	//	chasers( channel);
+	DDRA &= ~(1<<PINA6);
 	
-	TCCR0A |= (1 << WGM01) | (1 << WGM00);
-	TCCR0B |= (1 << CS02); //(1 << CS01) | (1 << CS00);
+	//TCCR0A |= (1 << WGM01) | (1 << WGM00);
+	TCCR0B |= (1 << CS02) | (1 << CS00);
 	TIMSK0 |= (1 << TOIE0);
-	// configure PCINT0 change interrupt
 
+	// configure PCINT0 change interrupt
 	PCMSK0 |= (1 << PCINT7);
 	PCICR |= (1 << PCIE0);
 	sei();      // enable interrupts*/
@@ -75,8 +71,6 @@ void example_color_cycle( uint8_t channel)
 	rgb leds3[5];
 	rgb leds4[5];
 	
-	
-
 /*
 Red = 0xFF0000
 		rgb( 127, 0, 0),
@@ -91,20 +85,29 @@ Blue = 0x0000FF
 Purple = 0x800080
 		rgb( 64, 0, 64),
 */
+	rgb rainbow[] = {rgb( 0, 0, 0),
+					rgb( 64, 0, 0),
+					rgb( 64, 50, 0),
+					rgb( 0, 0, 64),
+					rgb( 32, 0, 32),
+					rgb( 0, 32, 0),
+					rgb( 0, 0, 0)};
 
-	uint16_t us = 10;
+
+	uint8_t us = 00;
+	bool alarm = false;
 	
 	while(1) {
-		us = in_time;
+		cli();
+		us = (in_time - 450) / 100;
+		sei();
 		
-		color_cycle::flash(false, ws2811::rgb(0,0,0), leds1, channel-2);
-		color_cycle::flash(true, ws2811::rgb(25,0,0), leds2, channel-1);
-		color_cycle::flash(false, ws2811::rgb(0,25,0), leds3, channel);
-		color_cycle::flash(true, ws2811::rgb(0,25,0), leds4, channel+1);
+		alarm = (bool)(PINA & (1 << PINA6));
 		
-		/*
-		color_cycle::color_cycle(sequenceAlarm, leds1, channel);
-		*/
+		color_cycle::flash(alarm, rainbow[us], leds1, channel-2);
+		color_cycle::flash(alarm, rainbow[us], leds2, channel-1);
+		color_cycle::flash(alarm, rainbow[6-us], leds3, channel);
+		color_cycle::flash(alarm, rainbow[6-us], leds4, channel+1);
 	}
 }
 	
@@ -116,6 +119,7 @@ ISR(PCINT0_vect)
 		in_start = micros();
 	} else {
 		// high->low
-		in_time = in_start - micros();
+		in_time = micros() - in_start;
 	}
+	
 }
