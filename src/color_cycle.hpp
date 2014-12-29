@@ -27,7 +27,7 @@ namespace color_cycle
 	{
 		scroll( new_value, leds);
 		send( leds, channel);
-		_delay_ms(33);
+		_delay_ms(40);
 	}
 	
 	template<uint8_t led_count>

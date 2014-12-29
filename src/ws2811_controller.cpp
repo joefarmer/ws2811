@@ -99,7 +99,7 @@ Purple = 0x800080
 	
 	while(1) {
 		cli();
-		us = (in_time - 450) / 100;
+		us = (in_time - 450) / 105;
 		sei();
 		
 		alarm = (bool)(PINA & (1 << PINA6));
