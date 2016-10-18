@@ -4,20 +4,16 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-//#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
-//#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
-//#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
-
 
 #include <avr/io.h>
 #include <math.h>
 #include <util/delay.h>
 #include <stdlib.h>
 #include <avr/interrupt.h> 
-#include "color_cycle.hpp"
+#include "ws2811_8.h"
+#include "plane.hpp"
 
 
-void example_color_cycle( uint8_t channel);
 volatile static uint16_t in_start = 0;
 volatile static uint16_t in_time  = 0;
 volatile uint16_t timer0_overflow_count = 0;
@@ -43,10 +39,16 @@ uint16_t micros() {
 	return ((m << 8) + t) * 8;
 }
 
-
 int main()
 {
 	static const uint8_t channel = 5;
+	static const uint8_t led_count = 15;
+	ws2811::rgb leftLED[led_count];
+	ws2811::rgb rightLED[led_count];
+	ws2811::rgb markerLED[6];
+	
+	//define red left light, green right light, tail white strobe, body red beacon top and bottom 
+		
     DDRB = 0xFF;
 	DDRA &= ~(1<<PINA7);
 	DDRA &= ~(1<<PINA6);
@@ -60,57 +62,25 @@ int main()
 	PCICR |= (1 << PCIE0);
 	sei();      // enable interrupts*/
 
-    example_color_cycle(channel);
-}
-	
-void example_color_cycle( uint8_t channel)
-{
-	using ws2811::rgb;
-	rgb leds1[5];
-	rgb leds2[5];
-	rgb leds3[5];
-	rgb leds4[5];
-	
-/*
-Red = 0xFF0000
-		rgb( 127, 0, 0),
-Orange = 0xFFA500
-		rgb( 127, 64, 0),
-Yellow = 0xFFFF00
-		rgb( 127, 100, 0),
-Green = 0x008000
-		rgb( 0, 64, 0),
-Blue = 0x0000FF
-		rgb( 0, 0, 127),
-Purple = 0x800080
-		rgb( 64, 0, 64),
-*/
-	rgb rainbow[] = {rgb( 0, 0, 0),
-					rgb( 64, 0, 0),
-					rgb( 64, 50, 0),
-					rgb( 0, 0, 64),
-					rgb( 32, 0, 32),
-					rgb( 0, 32, 0),
-					rgb( 0, 0, 0)};
-
-
 	uint8_t us = 00;
 	bool alarm = false;
-	
-	while(1) {
+	uint8_t count = 0;
+	while(1)
+	{
 		cli();
 		us = (in_time - 450) / 105;
 		sei();
 		
 		alarm = (bool)(PINA & (1 << PINA6));
 		
-		color_cycle::flash(alarm, rainbow[us], leds1, channel-2);
-		color_cycle::flash(alarm, rainbow[us], leds2, channel-1);
-		color_cycle::flash(alarm, rainbow[6-us], leds3, channel);
-		color_cycle::flash(alarm, rainbow[6-us], leds4, channel+1);
+		plane::flash(alarm, us, leftLED, channel-2, count);
+		plane::flash(alarm, us, rightLED, channel-1, count);
+		plane::beacons(alarm, markerLED, channel, count);
+		//color_cycle::flash(alarm, rainbow[6-us], leds4, channel+1);
+		count++;
 	}
 }
-	
+
 // input ppm pin signal change interrupt
 ISR(PCINT0_vect)
 {
