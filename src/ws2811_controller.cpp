@@ -15,7 +15,7 @@
 
 
 volatile static uint16_t in_start = 0;
-volatile static uint16_t in_time  = 0;
+volatile static uint16_t in_time  = 2000;
 volatile uint16_t timer0_overflow_count = 0;
 
 SIGNAL(TIMER0_OVF_vect)
@@ -47,7 +47,9 @@ int main()
 	ws2811::rgb rightLED[led_count];
 	ws2811::rgb markerLED[6];
 	
-	//define red left light, green right light, tail white strobe, body red beacon top and bottom 
+	//define red left light, green right light
+	leftLED[led_count-1] = ws2811::rgb( 255, 0, 0);
+	rightLED[led_count-1] = ws2811::rgb( 0, 255, 0);
 		
     DDRB = 0xFF;
 	DDRA &= ~(1<<PINA7);
@@ -62,7 +64,7 @@ int main()
 	PCICR |= (1 << PCIE0);
 	sei();      // enable interrupts*/
 
-	uint8_t us = 00;
+	uint8_t us = 0;
 	bool alarm = false;
 	uint8_t count = 0;
 	while(1)

@@ -40,23 +40,72 @@ namespace plane
 	template<uint8_t led_count>
 	void flash(bool alarm, uint8_t us, ws2811::rgb (&leds)[led_count], uint8_t channel, uint8_t count)
 	{
-		//ws2811::rgb color; 
-
 		if(alarm)
 		{
 			ws2811::rgb strobe = ws2811::rgb( 255, 0, 0);
-			animate(strobe, leds, channel);
+			for (uint8_t idx = 0; idx != led_count; ++idx)
+			{   
+				animate(strobe, leds, channel);
+			}
 		}
-		else
+		else if(us < 2)
 		{
 			for (uint8_t idx = 0; idx != led_count; ++idx)
 			{   
-				animate(ws2811::rgb( my_rand(), my_rand(), my_rand()), leds, channel);		
+				animate(ws2811::rgb(my_rand(), my_rand(), my_rand()), leds, channel);		
 			}
 			
 			for (uint8_t idx = led_count; idx != 0; --idx)
 			{
-				animate(ws2811::rgb( my_rand(), my_rand(), my_rand()), leds, channel);		
+				animate(ws2811::rgb(my_rand(), my_rand(), my_rand()), leds, channel);		
+			}
+		}
+		else if(us == 3)
+		{
+			for (uint8_t idx = 0; idx != led_count; ++idx)
+			{   
+				animate(ws2811::rgb(my_rand(), 0, my_rand()), leds, channel);		
+			}
+			
+			for (uint8_t idx = led_count; idx != 0; --idx)
+			{
+				animate(ws2811::rgb(my_rand(), 0, my_rand()), leds, channel);		
+			}		
+		}
+		else if(us == 4)
+		{
+			for (uint8_t idx = 0; idx != led_count; ++idx)
+			{   
+				animate(ws2811::rgb(0, my_rand(), my_rand()), leds, channel);		
+			}
+			
+			for (uint8_t idx = led_count; idx != 0; --idx)
+			{
+				animate(ws2811::rgb(0, my_rand(), my_rand()), leds, channel);		
+			}
+		}
+		else if(us == 5)
+		{
+			for (uint8_t idx = 0; idx != led_count; ++idx)
+			{   
+				animate(ws2811::rgb(0, 0, my_rand()), leds, channel);		
+			}
+			
+			for (uint8_t idx = led_count; idx != 0; --idx)
+			{
+				animate(ws2811::rgb(0, 0, my_rand()), leds, channel);		
+			}
+		}
+		else if(us > 5)
+		{
+			for (uint8_t idx = 0; idx != led_count; ++idx)
+			{   
+				animate(ws2811::rgb(0, 0, 0), leds, channel);		
+			}
+			
+			for (uint8_t idx = led_count; idx != 0; --idx)
+			{
+				animate(ws2811::rgb(0, 0, 0), leds, channel);		
 			}
 		}
 	}
